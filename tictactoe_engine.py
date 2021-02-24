@@ -1,7 +1,8 @@
-from enum import Enum
+#!/usr/bin/env python3
+from enum import Enum, unique
 
-state_list=[]
-class Code(Enum):
+@unique
+class engineReturnCode(Enum):
 	SUCCESS = 1
 	FAILURE = 2
 	WIN = 3
@@ -10,69 +11,63 @@ class Code(Enum):
 	VALID = 6
 
 class tictactoeEngine:
-	def __init__(self, agent1, agent1moves, agent1value,  agent2, agent2moves, agent2value):
+	def __init__(self, agent1, agent2):
 		self.agent1 = agent1
 		self.agent2 = agent2
-		self.agent1moves = agent1moves
-		self.agent2moves = agent2moves
-		self.agent1value = agent1value
-		self.agent2value = agent2value
 		self.gamestate = [0] * 9
-		self.index1 = 0
-		self.index2 = 0
+		self.state_list= []
 
+	
 	def startEngine(self):
 		if (self.gamestate == [0] * 9):
-			if (self.checkWin() == Code.RUNNING):
+			if (self.checkWin() == engineReturnCode.RUNNING):
 				for x in range(0,9):
-					if(x%2 == 0 and (self.checkTie() != Code.TIE) and (self.checkWin()== Code.RUNNING) ):
-						a = self.agent1moves[self.index1]
-						while(self.checkvalid(a-1) != Code.SUCCESS):
-							a = self.agent1moves[self.index1]
-						self.index1 +=1
-						self.gamestate[a-1] = self.agent1value
-					elif(x%2==1 and (self.checkTie() != Code.TIE) and (self.checkWin()== Code.RUNNING) ):
-						b = self.agent2moves[self.index2]
-						while(self.checkvalid(b-1) != Code.SUCCESS):
-							b = self.agent2moves[self.index2]
-						self.index2 +=1
-						self.gamestate[b-1] = self.agent2value
+					if(x%2 == 0 and (self.checkTie() != engineReturnCode.TIE) and (self.checkWin()== engineReturnCode.RUNNING) ):
+						a = self.agent1.move(self.gamestate)
+						while(self.checkvalid(a) != engineReturnCode.SUCCESS):
+							a = self.agent1.move(self.gamestate)
+						self.gamestate[a] = self.agent1.value
+					elif(x%2==1 and (self.checkTie() != engineReturnCode.TIE) and (self.checkWin()== engineReturnCode.RUNNING) ):
+						b = self.agent2.move(self.gamestate)
+						while(self.checkvalid(b) != engineReturnCode.SUCCESS):
+							b = (self.agent2).move(self.gamestate)
+						self.gamestate[b] = self.agent2.value
 
 					self.get_gameState()
-					if (Code.TIE == self.checkTie()): 
-						return Code.TIE, 0, 0
+					if (engineReturnCode.TIE == self.checkTie()): 
+						return engineReturnCode.TIE, 0, 0
 						 
-					if (self.checkWin()== Code.WIN and (self.checkTie() != Code.TIE) ):
+					if (self.checkWin()== engineReturnCode.WIN and (self.checkTie() != engineReturnCode.TIE) ):
 						if (x%2==0): 
-							return Code.SUCCESS , self.get_gameState(), self.agent1value  
+							return engineReturnCode.SUCCESS , self.get_gameState(), self.agent1.value  
 						else:
-							return Code.SUCCESS, self.get_gameState(), self.agent2value
+							return engineReturnCode.SUCCESS, self.get_gameState(), self.agent2.value
 
 	def get_gameState(self): 
-		state_list.append(list(self.gamestate))
-		return state_list
+		self.state_list.append(list(self.gamestate))
+		return self.state_list
 		
 
 	def checkWin(self):
 		if(self.gamestate != [0]*9):
 			if (self.gamestate[0]== self.gamestate[4] ==  self.gamestate[8] != 0 ):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[0]== self.gamestate[3] ==  self.gamestate[6] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[0]== self.gamestate[1] ==  self.gamestate[2] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[2]== self.gamestate[5] ==  self.gamestate[8] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[2]== self.gamestate[4] ==  self.gamestate[6] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[6]== self.gamestate[7] ==  self.gamestate[8] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[3]== self.gamestate[4] ==  self.gamestate[5] != 0):
-				return Code.WIN
+				return engineReturnCode.WIN
 			elif(self.gamestate[1]== self.gamestate[4] ==  self.gamestate[7] != 0):
-				return Code.WIN
-			else: return Code.RUNNING
-		else: return Code.RUNNING
+				return engineReturnCode.WIN
+			else: return engineReturnCode.RUNNING
+		else: return engineReturnCode.RUNNING
 	
 
 	def checkTie(self):
@@ -80,12 +75,13 @@ class tictactoeEngine:
 		for p in self.gamestate:
 			if (p != 0):
 				count +=1 
-		if (count==9): return Code.TIE
-		return Code.RUNNING
+		if (count==9): return engineReturnCode.TIE
+		return engineReturnCode.RUNNING
 
 
 	def checkvalid(self, a):
-		if (self.gamestate[a] != 0):
-			return Code.FAILURE
+		self.a = a
+		if (self.gamestate[self.a] != 0):
+			return engineReturnCode.FAILURE
 		else: 
-			return Code.SUCCESS
+			return engineReturnCode.SUCCESS
