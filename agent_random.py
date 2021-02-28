@@ -12,6 +12,5 @@ class agent:
 		if(self.gamestate == [0]*9): return random.randint(0, 8)
 		for x in range(len(self.gamestate)):
 			if (self.gamestate[x] == 0): (list).append(x)
-		random_move = random.choice(list)
-		return random_move
+		return random.choice(list)
 
