@@ -1,37 +1,39 @@
 #!/usr/bin/env python3
 
-from tictactoe_engine import engineReturnCode
-from agent_random import agent
-from tictactoe_engine import tictactoeEngine
+from tictactoe_engine import EngineReturnCode
+from agent_random import Agent
+from tictactoe_engine import TictactoeEngine
 import json
 
-agent1 = agent("anik", 1)
-agent2 = agent("arka", 5)
-engine1 = tictactoeEngine()
+agent1 = Agent("anik", 1)
+agent2 = Agent("arka", 5)
+engine_instance = TictactoeEngine()
 count = 1
-while(engine1.engine_status == engineReturnCode.RUNNING):
-	state = engine1.gamestate
+while(engine_instance.engine_status == EngineReturnCode.RUNNING):
+	state = engine_instance.gamestate
 	if (count % 2 == 1):
+		engine_instance.get_available_pos()
 		move = agent1.move(state)
-		engine1.updateState(move, agent1.value)
+		engine_instance.update_state(move, agent1.value)
 		print("count-->%d, move--->%d "%(count ,move))
-		# if(engine1.checkInput == engineReturnCode.INVALID_INPUT):
+		# if(engine_instance.check_input == EngineReturnCode.INVALID_INPUT):
 		# 	move = agent1.move(state)
-		# 	returnn = engine1.updateState(move, agent1.value)
+		# 	returnn = engine_instance.updateState(move, agent1.value)
 	if(count %2 == 0):
+		engine_instance.get_available_pos()
 		move = agent2.move(state)
-		engine1.updateState(move, agent2.value)
+		engine_instance.update_state(move, agent2.value)
 		print("count-->%d, move--->%d "%(count ,move))
-		# if(engine1.checkInput == engineReturnCode.INVALID_INPUT):
+		# if(engine_instance.check_input == EngineReturnCode.INVALID_INPUT):
 		# 	move = agent2.move(state)
-		# 	returnn = engine1.updateState(move, agent2.value)
+		# 	returnn = engine_instance.updateState(move, agent2.value)
 	count += 1
-print(engine1.engine_status)	 
-if (engine1.engine_status == engineReturnCode.WIN):
+print(engine_instance.engine_status)	 
+if (engine_instance.engine_status == EngineReturnCode.WIN):
 	game_dictionary = {
 		#"times" : times,
-		"winner_moves" : engine1.list_of_states,
-		"winning_agent_value" : engine1.winning_agents_input
+		"winner_moves" : engine_instance.list_of_states,
+		"winning_agent_value" : engine_instance.winning_agents_input
 	}
 	json_file = open("gamelog.json", "a")
 	json.dump(game_dictionary, json_file, indent=4)

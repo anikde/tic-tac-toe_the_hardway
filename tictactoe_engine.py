@@ -1,66 +1,71 @@
 #!/usr/bin/env python3
 from enum import Enum, unique
-
+import random
 @unique
-class engineReturnCode(Enum):
+class EngineReturnCode(Enum):
 	WIN = 0
 	RUNNING = 1
 	TIE = 2
 	VALID = 3
 	INVALID_INPUT = 4
 
-class tictactoeEngine:
+class TictactoeEngine:
 
 	def __init__(self):
 		self.gamestate = [0]*9
 		self.list_of_states = []
-		self.engine_status = engineReturnCode.RUNNING
+		self.engine_status = EngineReturnCode.RUNNING
 		self.winning_agents_input = 0
-		self.checkInput = engineReturnCode.VALID
+		self.check_input = EngineReturnCode.VALID
 
 
 
-	def updateState(self,move, agentValue):
-		self.move = move
-		self.checkvalid(move)
-		if (self.checkInput == engineReturnCode.VALID):
-			self.gamestate[move] = agentValue
-			if( self.checkstatus() == engineReturnCode.TIE ):
-				self.engine_status = engineReturnCode.TIE
+	def update_state(self,agents_move, agent_value):
+		self.agents_move = agents_move
+		self.check_valid(agents_move)
+		if (self.check_input == EngineReturnCode.VALID):
+			self.gamestate[agents_move] = agent_value
+			if( self.check_status() == EngineReturnCode.TIE ):
+				self.engine_status = EngineReturnCode.TIE
 				self.winning_agents_input = -1
-			if(self.checkstatus() == engineReturnCode.WIN ): 
-				self.engine_status = engineReturnCode.WIN
-				self.winning_agents_input = agentValue
-			elif( self.checkstatus() == engineReturnCode.RUNNING ):
-				self.engine_status =  engineReturnCode.RUNNING
+			if(self.check_status() == EngineReturnCode.WIN ): 
+				self.engine_status = EngineReturnCode.WIN
+				self.winning_agents_input = agent_value
+			elif( self.check_status() == EngineReturnCode.RUNNING ):
+				self.engine_status =  EngineReturnCode.RUNNING
 				self.winning_agents_input = 0
-		self.get_gameState()
+		self.get_gamestate()
 
-	def checkWin(self):
-		if (self.gamestate[0]== self.gamestate[4] ==  self.gamestate[8] != 0 ):return engineReturnCode.WIN
-		elif(self.gamestate[0]== self.gamestate[3] ==  self.gamestate[6] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[0]== self.gamestate[1] ==  self.gamestate[2] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[2]== self.gamestate[5] ==  self.gamestate[8] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[2]== self.gamestate[4] ==  self.gamestate[6] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[6]== self.gamestate[7] ==  self.gamestate[8] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[3]== self.gamestate[4] ==  self.gamestate[5] != 0):return engineReturnCode.WIN
-		elif(self.gamestate[1]== self.gamestate[4] ==  self.gamestate[7] != 0):return engineReturnCode.WIN
-		else: return engineReturnCode.RUNNING
+	def check_win(self):
+		if (self.gamestate[0]== self.gamestate[4] ==  self.gamestate[8] != 0 ):return EngineReturnCode.WIN
+		elif(self.gamestate[0]== self.gamestate[3] ==  self.gamestate[6] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[0]== self.gamestate[1] ==  self.gamestate[2] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[2]== self.gamestate[5] ==  self.gamestate[8] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[2]== self.gamestate[4] ==  self.gamestate[6] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[6]== self.gamestate[7] ==  self.gamestate[8] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[3]== self.gamestate[4] ==  self.gamestate[5] != 0):return EngineReturnCode.WIN
+		elif(self.gamestate[1]== self.gamestate[4] ==  self.gamestate[7] != 0):return EngineReturnCode.WIN
+		return EngineReturnCode.RUNNING
 
-	def checkTie(self):
+	def check_tie(self):
 		if all (self.gamestate):
-			return engineReturnCode.TIE
-		else: return engineReturnCode.RUNNING
+			return EngineReturnCode.TIE
+		return EngineReturnCode.RUNNING
 
-	def checkstatus(self):
-		if( self.checkTie() == engineReturnCode.TIE ): return engineReturnCode.TIE
-		if( self.checkWin() == engineReturnCode.WIN ): return engineReturnCode.WIN
-		elif( self.checkWin() == engineReturnCode.RUNNING ): return engineReturnCode.RUNNING
+	def check_status(self):
+		if( self.check_tie() == EngineReturnCode.TIE ): return EngineReturnCode.TIE
+		if( self.check_win() == EngineReturnCode.WIN ): return EngineReturnCode.WIN
+		elif( self.check_win() == EngineReturnCode.RUNNING ): return EngineReturnCode.RUNNING
 
-	def get_gameState(self):
+	def get_gamestate(self):
 		self.list_of_states.append(list(self.gamestate))
 		return self.list_of_states
 
-	def checkvalid(self, a):
-		if (self.gamestate[a] != 0): self.checkInput = engineReturnCode.INVALID_INPUT
-		else: self.checkInput = engineReturnCode.VALID
+	def check_valid(self, players_move):
+		if (self.gamestate[players_move] != 0): self.check_input = EngineReturnCode.INVALID_INPUT
+		else: self.check_input = EngineReturnCode.VALID
+
+	def get_available_pos(self):
+		self.vacant_pos =[]
+		for x in range(len(self.gamestate)):
+			if (self.gamestate[x] == 0): (self.vacant_pos).append(x)
