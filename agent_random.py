@@ -6,11 +6,7 @@ class Agent:
 		self.name = name
 		self.value = value
 
-	def move(self, gamestate):
-		self.gamestate = gamestate
-		vacant_pos =[]
-		if(self.gamestate == [0]*9): return random.randint(0, 8)
-		for x in range(len(self.gamestate)):
-			if (self.gamestate[x] == 0): (vacant_pos).append(x)
-		return random.choice(vacant_pos)
-
+	def move(self, available_pos):
+		""" Returns a random choice from the available moves of the board
+		"""
+		return random.choice(available_pos)

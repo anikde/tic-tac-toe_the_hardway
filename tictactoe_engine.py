@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+
 from enum import Enum, unique
-import random
 @unique
 class EngineReturnCode(Enum):
 	WIN = 0
@@ -18,11 +18,20 @@ class TictactoeEngine:
 		self.winning_agents_input = 0
 		self.check_input = EngineReturnCode.VALID
 
-
-
 	def update_state(self,agents_move, agent_value):
+		""" updates the state of the board with correct inputs from the player. Heart of the game.
+
+			Parameters
+			----------
+			agents_move : agent's move (numerical value between 0 - 8).
+						The choice of agent's move can be found from available states returned by the function get_available_pos().
+			
+			agent_value : The symbol associated with the agent which is making the move.
+
+		
+		"""
 		self.agents_move = agents_move
-		self.check_valid(agents_move)
+		self.check_player_input_valid(agents_move)
 		if (self.check_input == EngineReturnCode.VALID):
 			self.gamestate[agents_move] = agent_value
 			if( self.check_status() == EngineReturnCode.TIE ):
@@ -37,6 +46,9 @@ class TictactoeEngine:
 		self.get_gamestate()
 
 	def check_win(self):
+		"""
+			Winning rules defined
+		"""
 		if (self.gamestate[0]== self.gamestate[4] ==  self.gamestate[8] != 0 ):return EngineReturnCode.WIN
 		elif(self.gamestate[0]== self.gamestate[3] ==  self.gamestate[6] != 0):return EngineReturnCode.WIN
 		elif(self.gamestate[0]== self.gamestate[1] ==  self.gamestate[2] != 0):return EngineReturnCode.WIN
@@ -54,18 +66,20 @@ class TictactoeEngine:
 
 	def check_status(self):
 		if( self.check_tie() == EngineReturnCode.TIE ): return EngineReturnCode.TIE
-		if( self.check_win() == EngineReturnCode.WIN ): return EngineReturnCode.WIN
-		elif( self.check_win() == EngineReturnCode.RUNNING ): return EngineReturnCode.RUNNING
+		return self.check_win()
 
 	def get_gamestate(self):
 		self.list_of_states.append(list(self.gamestate))
 		return self.list_of_states
 
-	def check_valid(self, players_move):
+	def check_player_input_valid(self, players_move):
 		if (self.gamestate[players_move] != 0): self.check_input = EngineReturnCode.INVALID_INPUT
 		else: self.check_input = EngineReturnCode.VALID
 
 	def get_available_pos(self):
+		""" The function returns the available moves to be made by looking at the current gamestate.
+		"""
 		self.vacant_pos =[]
 		for x in range(len(self.gamestate)):
 			if (self.gamestate[x] == 0): (self.vacant_pos).append(x)
+		return self.vacant_pos
