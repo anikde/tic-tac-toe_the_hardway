@@ -16,23 +16,14 @@ while(engine_instance.engine_status == EngineReturnCode.RUNNING):
 	if (count % 2 == 1):
 		move = agent1.move(engine_instance.get_available_pos())
 		engine_instance.update_state(move, agent1.value)
-		print("count-->%d, move--->%d "%(count ,move))
-		# if(engine_instance.check_input == EngineReturnCode.INVALID_INPUT):
-		# 	move = agent1.move(state)
-		# 	returnn = engine_instance.updateState(move, agent1.value)
 	if(count %2 == 0):
 		move = agent2.move(engine_instance.get_available_pos())
 		engine_instance.update_state(move, agent2.value)
-		print("count-->%d, move--->%d "%(count ,move))
-		# if(engine_instance.check_input == EngineReturnCode.INVALID_INPUT):
-		# 	move = agent2.move(state)
-		# 	returnn = engine_instance.updateState(move, agent2.value)
 	count += 1
 print(engine_instance.engine_status)
 
 if (engine_instance.engine_status == EngineReturnCode.WIN):
 	game_dictionary = {
-		#"times" : times,
 		"winner_moves" : engine_instance.list_of_states,
 		"winning_agent_value" : engine_instance.winning_agents_input
 	}

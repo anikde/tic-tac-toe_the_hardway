@@ -19,11 +19,11 @@ class TictactoeEngine:
 		self.check_input = EngineReturnCode.VALID
 
 	def update_state(self,agents_move, agent_value):
-		""" updates the state of the board with correct inputs from the player. Heart of the game.
+		""" updates the state of the board with inputs from the player. Heart of the game.
 
 			Parameters
 			----------
-			agents_move : agent's move (numerical value between 0 - 8).
+			agents_move : agent's move ( numerical value from the set [0, 8] ).
 						The choice of agent's move can be found from available states returned by the function get_available_pos().
 			
 			agent_value : The symbol associated with the agent which is making the move.
